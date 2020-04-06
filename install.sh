@@ -71,5 +71,9 @@ WRITE "Demo of the library"
 zw ##class(Grongier.OpenApi.Definition).Process("PetShop.spec")
 
 WRITE "[ OK ] Everything is OK."
+
+zn "%SYS"
+do ##class(SYS.Container).QuiesceForBundling()
+Do ##class(Security.Users).UnExpireUserPasswords("*")
 halt
 EOF
