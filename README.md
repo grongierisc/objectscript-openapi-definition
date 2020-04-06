@@ -42,4 +42,4 @@ IRISAPP>zw ##class(Grongier.OpenApi.Definition).Process("PetShop.spec")
 
 ### Dockerfile
 
-The dockerfile, install zpm, webterminal, code and the PetShop example.
+The dockerfile, create IRISAPP namespace, install code and the PetShop example.

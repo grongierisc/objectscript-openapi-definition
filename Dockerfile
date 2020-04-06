@@ -6,29 +6,25 @@ USER root
 WORKDIR /opt/irisapp
 RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/irisapp
 
-
 USER irisowner
 
-RUN mkdir -p /tmp/deps \
- && cd /tmp/deps \
- && wget -q https://pm.community.intersystems.com/packages/zpm/latest/installer -O zpm.xml
-
-
 COPY  Installer.cls .
+COPY  install.sh .
 COPY  src src
-COPY irissession.sh /
 
-# running IRIS and open IRIS termninal in USER namespace
-SHELL ["/irissession.sh"]
-# below is objectscript executed in terminal
-# each row is what you type in terminal and Enter
-RUN \
-  do $SYSTEM.OBJ.Load("Installer.cls", "ck") \
-  set sc = ##class(App.Installer).setup() \
-  Do $system.OBJ.Load("/tmp/deps/zpm.xml", "ck") \
-  zn "IRISAPP" \
-  zpm "install webterminal" 
+# Install
+# $ISC_PACKAGE_INSTANCENAME name of the iris instance on docker, defaults to IRIS, valued by InterSystems
+# First start the instance quietly in emergency mode with user sys and password sys
+RUN iris start $ISC_PACKAGE_INSTANCENAME quietly EmergencyId=sys,sys && \
+    sh install.sh $ISC_PACKAGE_INSTANCENAME sys IRISAPP && \
+    /bin/echo -e "sys\nsys\n" | iris stop $ISC_PACKAGE_INSTANCENAME quietly
 
-# bringing the standard shell back
-SHELL ["/bin/bash", "-c"]
-CMD [ "-l", "/usr/irissys/mgr/messages.log" ]
+# Cleanup
+USER root
+RUN rm -f $ISC_PACKAGE_INSTALLDIR/mgr/messages.log && \
+    rm -f $ISC_PACKAGE_INSTALLDIR/mgr/alerts.log && \
+    rm -f $ISC_PACKAGE_INSTALLDIR/mgr/IRIS.WIJ && \
+    rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal/* && \
+    rm -fR src
+
+USER irisowner
