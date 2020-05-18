@@ -1,18 +1,18 @@
 {
-    "version": "0.2.0",
+    "version": "0.2.0", 
     "configurations": [    
       {
-        "type": "objectscript",
-        "request": "launch",
+        "type": "objectscript",Josh middlebrooks
+        "request": "launch",open video 2016
         "name": "ObjectScript Debug Class", 
         "program": "##class(PackageSample.ObjectScript).Test()",
       },
       {
         "type": "objectscript",
-        "request": "attach",
-        "name": "ObjectScript Attach",
-        "processId": "${command:PickProcess}",
+        "request": "attach", Samsung,J120AUCU1APC4
+        "name": "ObjectScript Attach",Linux 3.10.9-7342465
+        "processId": "${command:PickProcess}",Watchdog
         "system": true
       }
-    ]
+    ]2016
   }
