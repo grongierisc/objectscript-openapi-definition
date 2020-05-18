@@ -1,0 +1,142 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="file:///android_asset/zepto.min.js"></script>
+	<script type="text/javascript" src="file:///android_asset/ipwebcam.js"></script>
+	
+
+	<script type="text/javascript">
+	
+	
+		$(function () {
+			config = ipwebcam.load_config({timeout: 10, use_af: false})
+
+			$('#timeout').val(config.timeout).keyup(function() {
+				config.timeout = $('#timeout').val()
+				needs_save_config()
+			})
+			init_checkboxes(["use_af"])
+			translate_all()
+		})
+		translations = {'en':{'use_autofocus_when_shooting_photos': 'Use autofocus when shooting photos','sftp_ftp_email_and_android_50_storage_uploaders_included': 'SFTP, FTP, Email and Android 5.0 storage uploaders included','minimum_time_between_photos': 'Minimum time between photos','select_uploader': 'Select uploader','install_uploader_plugin': 'Install uploader plugin','_sec': ' sec.','not_selected': 'Not selected','dont_remove_local_video_files_on_failed_upload': 'Don\'t remove local video files on failed upload','delete_local_video_files_on_successful_upload': 'Delete local video files on successful upload','install_dropbox_uploader': 'Install Dropbox uploader','download_ip_webcam_dropbox_plugin': 'Download IP Webcam Dropbox plugin','remove_uploaded_files': 'Remove uploaded files','keep_failed_files': 'Keep failed files','use_autofocus': 'Use autofocus','no_configuration_required': 'No configuration required'},'ru':{'use_autofocus_when_shooting_photos': 'Фокусировать камеру для фотографий','sftp_ftp_email_and_android_50_storage_uploaders_included': 'Поддерживает загрузку по протоколам SFTP, FTP, электронной почте и на расширяемое локальное хранилище Android 5.0','minimum_time_between_photos': 'Минимальное время между фотографиями','select_uploader': 'Выберите загрузчик','install_uploader_plugin': 'Установить расширение для загрузки','_sec': ' сек.','not_selected': 'Не выбрано','dont_remove_local_video_files_on_failed_upload': 'Не удалять локальные файлы, если загрузка не удалась','delete_local_video_files_on_successful_upload': 'Удалять локальные файлы после успешной загрузки','install_dropbox_uploader': 'Скачать расширение IP Webcam для Dropbox','download_ip_webcam_dropbox_plugin': 'Установить расширение для работы с Dropbox','remove_uploaded_files': 'Удалять загруженные файлы','keep_failed_files': 'Оставлять незагруженное','use_autofocus': 'Использовать автофокус','no_configuration_required': 'Настройки не требуется'},'zh':{'use_autofocus_when_shooting_photos': '当拍摄照片时使用自动对焦','sftp_ftp_email_and_android_50_storage_uploaders_included': '包含SFTP，FTP，Email和Android 5.0存储上传器','minimum_time_between_photos': '两次拍照之间的最短时间','select_uploader': '选择上传器','install_uploader_plugin': '安装上传器插件','_sec': '秒。','not_selected': '未选中','dont_remove_local_video_files_on_failed_upload': '在上传失败后不要移除本地视频文件','delete_local_video_files_on_successful_upload': '成功上传后删除本地视频文件','install_dropbox_uploader': '安装Dropbox上传器','download_ip_webcam_dropbox_plugin': '下载IP摄像头Dropbox插件','remove_uploaded_files': '移除已上传文件','keep_failed_files': '保留失败文件','use_autofocus': '使用自动对焦','no_configuration_required': '无需配置'},'fr':{'use_autofocus_when_shooting_photos': 'Use autofocus when shooting photos','sftp_ftp_email_and_android_50_storage_uploaders_included': 'SFTP, FTP, Email and Android 5.0 storage uploaders included','minimum_time_between_photos': 'Minimum time between photos','select_uploader': 'Select uploader','install_uploader_plugin': 'Install uploader plugin','_sec': ' sec.','not_selected': 'Not selected','dont_remove_local_video_files_on_failed_upload': 'Don\'t remove local video files on failed upload','delete_local_video_files_on_successful_upload': 'Delete local video files on successful upload','install_dropbox_uploader': 'Install Dropbox uploader','download_ip_webcam_dropbox_plugin': 'Download IP Webcam Dropbox plugin','remove_uploaded_files': 'Remove uploaded files','keep_failed_files': 'Keep failed files','use_autofocus': 'Use autofocus','no_configuration_required': 'No configuration required'},'it':{'use_autofocus_when_shooting_photos': 'Utilizzare autofocus quando scatta foto','sftp_ftp_email_and_android_50_storage_uploaders_included': 'SFTP, FTP, e-mail e Android 5.0 archivio aggiornamenti inclusi','minimum_time_between_photos': 'Tempo minimo tra le foto','select_uploader': 'Seleziona aggiornato','install_uploader_plugin': 'Carica installa plugin','_sec': ' sec.','not_selected': 'Nessuna selezione','dont_remove_local_video_files_on_failed_upload': 'Non rimuovere i file video locali durante il caricamento fallito','delete_local_video_files_on_successful_upload': 'Eliminare i file video locali a caricamento riuscito','install_dropbox_uploader': 'Carica installa Dropbox','download_ip_webcam_dropbox_plugin': 'Scarica IP Webcam Dropbox plugin','remove_uploaded_files': 'Rimuovere i file caricati','keep_failed_files': 'Mantenimento files fallito','use_autofocus': 'Usa autofocus','no_configuration_required': 'Nessuna configurazione necessaria'},'es':{'use_autofocus_when_shooting_photos': 'Usar autoenfoque al hacer fotos','sftp_ftp_email_and_android_50_storage_uploaders_included': 'Subida a SFTP, FTP, Email y Android 5.0 sin necesidad de instalar componentes adicionales','minimum_time_between_photos': 'Tiempo minimo entre fotos','select_uploader': 'Seleccione el  método de subida','install_uploader_plugin': 'Instalar plugin de subidas','_sec': ' seg.','not_selected': 'No se seleccionó','dont_remove_local_video_files_on_failed_upload': 'No eliminar los archivos de video del dispositivo  si no se han subido correctamente','delete_local_video_files_on_successful_upload': 'Eliminar los archivos de video del dispositivo después de que se hayan subido correctamente','install_dropbox_uploader': 'Instalar la aplicación para la subida de archivos a Dropbox','download_ip_webcam_dropbox_plugin': 'Descargar el plugin de Dropbox de IP Webcam','remove_uploaded_files': 'Eliminar archivos subidos','keep_failed_files': 'Mantener los archivos fallidos','use_autofocus': 'Usar autoenfoque','no_configuration_required': 'No se necesita configuración'},'de':{'use_autofocus_when_shooting_photos': 'Autofokus benutzen wenn Fotos gemacht werden','sftp_ftp_email_and_android_50_storage_uploaders_included': 'SFTP, FTP, E-Mail und Android 5.0 Speicher Uploader enthalten','minimum_time_between_photos': 'Minimale Zeit zwischen Fotos','select_uploader': 'Uploader auswählen','install_uploader_plugin': 'Uploader Plugin installieren','_sec': ' Sek.','not_selected': 'Nicht ausgewählt','dont_remove_local_video_files_on_failed_upload': 'Lokale Dateien bei fehlerhaftem Upload nicht löschen','delete_local_video_files_on_successful_upload': 'Videodateien nach hochladen löschen','install_dropbox_uploader': 'Dropbox Uploader installieren','download_ip_webcam_dropbox_plugin': 'Download IP Webcam Dropbox Plugin','remove_uploaded_files': 'Hochgeladene Dateien entfernen','keep_failed_files': 'Fehlgechlagene Dateien behalten','use_autofocus': 'Autofokus aktivieren','no_configuration_required': 'Keine Konfiguration erforderlich'},'pl':{'use_autofocus_when_shooting_photos': 'Używaj autofocusa podczas robienia zdjęć','sftp_ftp_email_and_android_50_storage_uploaders_included': 'Zawiera uploadery SFTP, FTP, Email i Android 5.0 storage','minimum_time_between_photos': 'Najkrótszy czas między zdjęciami','select_uploader': 'Wybierz uploader','install_uploader_plugin': 'Instalacja wtyczki uploadera','_sec': ' sek.','not_selected': 'Nie wybrano','dont_remove_local_video_files_on_failed_upload': 'Nie usuwaj lokalnych plików video, gdy nie uda się ich wgrać','delete_local_video_files_on_successful_upload': 'Usuń lokalne pliki video po udanym wgraniu','install_dropbox_uploader': 'Instalacja uploadera Dropbox','download_ip_webcam_dropbox_plugin': 'Pobierz wtyczkę IP Webcam Dropbox','remove_uploaded_files': 'Usuń wgrane pliki','keep_failed_files': 'Zachowaj niewgrane pliki','use_autofocus': 'Używaj autofocus','no_configuration_required': 'Konfiguracja nie jest wymagana'},'ko':{'use_autofocus_when_shooting_photos': '사진터치시 오토포커스 사용','sftp_ftp_email_and_android_50_storage_uploaders_included': 'SFTP, FTP, Email 과 Android 5.0저장 업로더포함','minimum_time_between_photos': '사진사이의 최소 시간','select_uploader': '업로더 선택','install_uploader_plugin': '업로더 플러그인 설치','_sec': '초.','not_selected': '선택 안됨','dont_remove_local_video_files_on_failed_upload': '업로드 실패시 로컬장치의 비디오파일을 삭제하지 않음','delete_local_video_files_on_successful_upload': '업로드 성공시 로컬장치의 비디오파일 삭제','install_dropbox_uploader': '드랍박스 업로더 설치','download_ip_webcam_dropbox_plugin': 'IP Webcam 드랍박스 플러그인 다운로드','remove_uploaded_files': '업로드 파일 삭제','keep_failed_files': '실패한 파일 삭제하지 않음','use_autofocus': '오토포커스 사용','no_configuration_required': '설정 필요없음'},'ja':{'use_autofocus_when_shooting_photos': '写真撮影時にオートフォーカスを使用する','sftp_ftp_email_and_android_50_storage_uploaders_included': 'アップロード方法はSFTP、FTP、Email、そして、Android5.0のストレージ保存から選択できます','minimum_time_between_photos': '自動写真撮影における最小時間間隔','select_uploader': 'アップロード方法を選択する','install_uploader_plugin': 'アップローダープラグインをインストールする','_sec': ' 秒','not_selected': '選択されていません','dont_remove_local_video_files_on_failed_upload': 'アップロードに失敗した映像ファイルを削除しない','delete_local_video_files_on_successful_upload': 'アップロード後端末から映像ファイルを削除する','install_dropbox_uploader': 'Dropboxアップローダーをインストールする','download_ip_webcam_dropbox_plugin': 'IP WebcamのDropboxプラグインをダウンロードする','remove_uploaded_files': 'アップロード済みのファイルを削除する','keep_failed_files': 'アップロードに失敗したファイルを削除しない','use_autofocus': 'オートフォーカスを使用する','no_configuration_required': '設定の必要はありません'}}
+	
+
+	needs_save_config = function() {
+		ipwebcam.save_config(config)
+	}
+	init_checkboxes = function(checkboxes) {
+		$.each(checkboxes, function (idx, item) {
+			$('#'+item).prop("checked", config[item])
+			$('#'+item).change(function() {
+				config[item] = $('#'+item).prop("checked");
+				needs_save_config();
+			})
+		})
+	}
+	translate_all = function() {
+		var my_translation = translations[ipwebcam.lang]
+		if (my_translation == undefined) {
+			my_translation = translations['en']
+		}
+		$.each($('.translate'), function(index, item) {
+			item = $(item)
+			var token = item.text()
+			if (my_translation[token] != undefined) {
+				item.text(my_translation[token])
+			}
+			item.removeClass('translate')
+		})
+	}
+	
+	</script>
+	<style type="text/css">
+	
+		.translate {
+			display: none;
+		}
+		.no-underline {
+			text-decoration: none;
+		}
+		.list-item {
+			padding-right: 16px;
+			padding-left: 16px;
+			padding-top: 20px;
+			padding-bottom: 20px;
+			display: block;
+			margin: 0;
+			border-bottom: 1px solid #d2d2d2;
+			height: 32px;
+		}
+		.list-item:active, .checkbox-item:active {
+			background-color: #eee;
+		}
+		.list-title {
+			font-family: Roboto, droid-sans, sans-serif;
+			font-size: 16px;
+			color: black;
+		}
+		.list-subtitle {
+			font-family: Roboto, droid-sans, sans-serif;
+			font-size: 14px;
+			color: #757575;
+		}
+
+		.checkbox-labels {
+			position: absolute;
+			left: 72px;
+			display: block;
+		}
+		.checkbox-title {
+			font-family: Roboto, droid-sans, sans-serif;
+			font-size: 16px;
+			color: black;
+			
+		}
+		.checkbox-subtitle {
+			font-family: Roboto, droid-sans, sans-serif;
+			font-size: 14px;
+			color: #757575;
+		}
+
+		label input {
+		  display: none;
+		}
+		label span.check {
+		  height: 16px;
+		  width: 16px;
+		  border: 1px solid grey;
+		  display: inline-block;
+		  position: absolute;
+		  font-size: 16px;
+		  color: #3f51b5;
+		}
+		[type=checkbox]:checked + span:before {
+		  content: '\2714';
+		  position: absolute;
+		  top: -5px;
+		  left: 0;
+		}
+	
+	</style>
+</head>
+<body>
+
+<div class="list-item" id="uploaderSel">
+	<div class="list-title">Time between photos</div>
+	<input type="text" id="timeout" value="" class="list-subtitle translate"></input><span class="list-subtitle translate">_sec</span>
+</div>
+<label class="list-item">
+  <input id="use_af" type="checkbox">
+  <span class="check"></span>
+  <div class="checkbox-labels">
+	  <div class="checkbox-title translate">use_autofocus</div>
+	  <div class="checkbox-subtitle translate">use_autofocus_when_shooting_photos</div>
+  </div>
+</label>
+
+</body>
+</html>

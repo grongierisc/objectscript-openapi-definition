@@ -1,0 +1,12 @@
+{
+  "api_ver": 3,
+  "lang": {
+    "en": {
+      "desc": "Record video circularly at the start of IP Webcam",
+      "name": "C-record at the server start"
+    }
+  },
+  "name": "circular_record_at_start",
+  "sig": "vleFTEbG/VX8zGHy/WFqIakWThNWp1OAih45Jns1qQH8u5X1Zs7rrMhPPksYqaH9dC+Cxi2J8Miaygo/+m8ea2JHk+XSt3TjaOvhPiJhcKz2rAZtzr23D9ygh8OE94dSYz0axqr8AabC052hGYxxkd1kXCk1lZC2tiHn7Mg+jqU=",
+  "ver": 1
+}
