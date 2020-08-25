@@ -11,6 +11,6 @@ Property quantity As %Integer;
 
 Property shipDate As %VarString;
 
-Property status As %VarString;
+Property status As %VarString(VALUELIST = ",placed,approved,delivered");
 
 }

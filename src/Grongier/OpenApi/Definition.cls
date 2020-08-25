@@ -114,6 +114,19 @@ ClassMethod CreateProperty(classDef As %Dictionary.ClassDefinition, name As %Str
 	do:(value.minLength'="") propDef.Parameters.SetAt(value.minLength,"MINLEN")
 	do:(value.maxLength'="") propDef.Parameters.SetAt(value.maxLength,"MAXLEN")
 
+	// Set enum to valuelist
+	if value.enum '= "" {
+		set enums = value.enum
+		if enums.%IsA("%DynamicArray") {
+			Set valueList = ""
+			Set N=enums.%Size()
+			For i=0:1:N-1 {
+				Set valueList = valueList _","_ enums.%Get(i)
+			}
+		}
+		do propDef.Parameters.SetAt(valueList,"VALUELIST") 
+	}
+
 	// Insert into the class definition
 	If paramPos="" {
 		Do classDef.Properties.Insert(propDef)

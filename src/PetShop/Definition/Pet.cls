@@ -9,7 +9,7 @@ Property name As %VarString [ Required ];
 
 Property photoUrls As list Of %VarString [ Required ];
 
-Property status As %VarString;
+Property status As %VarString(VALUELIST = ",available,pending,sold");
 
 Property tags As list Of Tag;
 
