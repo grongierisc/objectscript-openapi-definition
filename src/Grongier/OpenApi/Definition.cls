@@ -21,7 +21,13 @@ ClassMethod Process(specClass As %String = "PetStore.spec") As %Status
     Set iterDefinitions = definitions.%GetIterator()
     while iterDefinitions.%GetNext(.key , .value ) {
         
-        Do:((value.type = "object")) ..GenerateClass(definitionPackage_"."_key,value)
+		if key [ "_" {
+			set tKey = $Translate(key,"_") 
+		}
+		else {
+			set tKey = key
+		}
+        Do:((value.type = "object")) ..GenerateClass(definitionPackage_"."_tKey,value)
 
     }
     
@@ -42,7 +48,8 @@ ClassMethod GenerateClass(name As %String, object As %DynamicObject) As %Status
 	Set:(listRequired="") listRequired = ##class(%DynamicArray).%New()
     while iterProperty.%GetNext( .key , .value ) {
 
-        Do ..CreateProperty(classDef,key,value,listRequired)   
+
+        Do ..CreateProperty(classDef,$Translate(key,"_"),value,listRequired)   
 		  
     }
     zw classDef.%Save()
@@ -145,13 +152,13 @@ ClassMethod GetObjectScriptType(property As %DynamicObject, propDef) As %Status 
 	
 	If type="array" {
 		Set propDef.Collection="list"
-		Set propDef.Type = $Replace($$$SimpleType(property.items),"#/definitions/","")
+		Set propDef.Type = $tr($Replace($$$SimpleType(property.items),"#/definitions/",""),"_")
 
 	} ElseIf type="file" {
 		Set propDef.Type="%Stream.Object"
 
 	} Else {
-		Set propDef.Type=$Replace($$$SimpleType(property),"#/definitions/","")
+		Set propDef.Type=$tr($Replace($$$SimpleType(property),"#/definitions/",""),"_")
 	}
 
 	Quit $$$OK
