@@ -1054,7 +1054,7 @@ XData OpenAPI [ MimeType = application/json ]
         "Phase": {
             "type": "object",
             "properties": {
-                "type": {
+                "type_undescore": {
                     "example": "injection",
                     "type": "string",
                     "enum": [
