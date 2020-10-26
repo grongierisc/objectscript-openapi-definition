@@ -36,11 +36,14 @@ ClassMethod Process(specClass As %String = "PetStore.spec") As %Status
 
 ClassMethod GenerateClass(name As %String, object As %DynamicObject) As %Status
 {
+	#dim classDef as %Dictionary.ClassDefinition
     Do ..CreateClassDef(name,.classDef)
 
 	// Add super class
 	Set parent="%JSON.Adaptor,%RegisteredObject"
 	Set classDef.Super=parent
+	// Fix issue for ProcedureBlock
+	Set classDef.ProcedureBlock = 1
 
     // For each property
     Set iterProperty = object.properties.%GetIterator()
@@ -123,12 +126,31 @@ ClassMethod CreateProperty(classDef As %Dictionary.ClassDefinition, name As %Str
 
 	// Set enum to valuelist
 	if value.enum '= "" {
+		#dim enums as %Library.DynamicArray
 		set enums = value.enum
 		if enums.%IsA("%DynamicArray") {
+			Set iter = enums.%GetIterator()
 			Set valueList = ""
-			Set N=enums.%Size()
-			For i=0:1:N-1 {
-				Set valueList = valueList _","_ enums.%Get(i)
+			While iter.%GetNext(.key , .enum ) {
+				set isDyna = 0
+				Try {
+					set isDyna = enum.%IsA("%Library.DynamicObject")
+				}
+				Catch {
+					//Do nothing
+				}
+				if 'isDyna {
+					// OpenAPI 2.0
+					Set valueList = valueList _","_ enum
+				}
+				else {
+					// OpenAPI 3.0
+					// Get first value of object
+					set iterEnum = enum.%GetIterator()
+					do iterEnum.%GetNext(.keyEnum , .enumValue )
+					Set valueList = valueList _","_ enumValue
+				}
+				
 			}
 		}
 		do propDef.Parameters.SetAt(valueList,"VALUELIST") 

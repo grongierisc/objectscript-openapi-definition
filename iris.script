@@ -1,0 +1,21 @@
+; run installer to create namespace
+do $SYSTEM.OBJ.Load("/opt/irisapp/Installer.cls", "ck")
+set sc = ##class(App.Installer).setup() 
+
+zn "IRISAPP"
+do $System.OBJ.LoadDir("/opt/irisapp/src","ck",,1)
+DO ^%REST 
+PetShopSwagger
+Y 
+/opt/irisapp/misc/swagger.json
+Y
+Y
+/csp/petshop
+zw ##class(Grongier.OpenApi.Definition).Process("PetShop.spec")
+
+
+zn "%SYS"
+Do ##class(Security.Users).UnExpireUserPasswords("*")
+
+; call your initial methods here
+halt
