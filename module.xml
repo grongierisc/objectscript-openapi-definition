@@ -3,7 +3,7 @@
   <Document name="objectscript-openapi-definition.ZPM">
     <Module>
       <Name>objectscript-openapi-definition</Name>
-      <Version>1.1.0</Version>
+      <Version>1.1.1</Version>
       <Packaging>module</Packaging>
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="Grongier.OpenApi.PKG"/>
