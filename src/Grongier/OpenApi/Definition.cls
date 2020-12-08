@@ -210,9 +210,9 @@ Method CreateProperty(classDef As %Dictionary.ClassDefinition, name As %String, 
 /// Get the ObjectScript type for a property.
 Method GetObjectScriptType(property As %DynamicObject, propDef) As %Status [ Internal ]
 {
-	#define SimpleType(%property) $case(%property.type,"string":"%String","number":"%Float","integer":"%Integer","boolean":"%Boolean","":%property."$ref",:"%VarString")
+	#define SimpleType(%property) $case(%property.type,"string":"%VarString","number":"%Float","integer":"%Integer","boolean":"%Boolean","":%property."$ref",:"%VarString")
 
-	#define GetSimpleCOSType(%type) $case(%type,"string":"%String","number":"%Float","integer":"%Integer","boolean":"%Boolean",:"%VarString")
+	#define GetSimpleCOSType(%type) $case(%type,"string":"%VarString","number":"%Float","integer":"%Integer","boolean":"%Boolean",:"%VarString")
 	
 	Set type=property.type
 	
