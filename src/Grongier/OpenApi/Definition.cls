@@ -70,7 +70,7 @@ ClassMethod Process(specClass As %String = "PetStore.spec") As %Status
 Method GenerateClass(name As %String, object As %DynamicObject) As %Status
 {
 	#dim classDef as %Dictionary.ClassDefinition
-    Do ..CreateClassDef(name,.classDef)
+    Do ..CreateClassDef($Translate(name,"-_",""),.classDef)
 
 	Set objectProperties = object
 	// Add super class
@@ -223,13 +223,14 @@ Method GetObjectScriptType(property As %DynamicObject, propDef) As %Status [ Int
 
 		; check if the target is a object or simple type
 		If tmpType [ "#/definitions/" {
-			Set tmpType = $Replace(tmpType,"#/definitions/",""), targetType = ..spec.definitions.%Get(tmpType).type
+			Set tmpType = $Replace(tmpType,"#/definitions/","")
+			set targetType = ..spec.definitions.%Get($g(tmpType)).type
 			If targetType '= "object" {
 				Set tmpType = $$$GetSimpleCOSType(targetType)
 			}
 		}
 
-		Set propDef.Type = tmpType
+		Set propDef.Type = $Translate(tmpType,"_-","")
 
 	} ElseIf type="file" {
 		Set propDef.Type="%Stream.Object"
@@ -239,16 +240,16 @@ Method GetObjectScriptType(property As %DynamicObject, propDef) As %Status [ Int
 		Set tmpType = $$$SimpleType(property)
 		If tmpType [ "#/definitions/" {
 			; check if the target is a object or simple type
-			Set tmpType = $Replace(tmpType,"#/definitions/",""), targetType = ..spec.definitions.%Get(tmpType).type
+			Set tmpType = $Replace(tmpType,"#/definitions/","")
+			set targetType = ..spec.definitions.%Get($get(tmpType)).type
 			If targetType '= "object" {
 				Set tmpType = $$$GetSimpleCOSType(targetType)
 			}
 		}
-		Set propDef.Type = tmpType
+		Set propDef.Type = $Translate(tmpType,"_-","")
 	}
 	
 	Quit $$$OK
 }
-
 
 }
