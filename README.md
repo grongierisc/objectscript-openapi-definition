@@ -50,6 +50,13 @@ docker-compose exec iris iris session iris
 USER>zn "IRISAPP"
 IRISAPP>zw ##class(Grongier.OpenApi.Definition).Process("PetShop.spec")
 ```
+  
+Version 1.2.0+ support now OpenAPI Version 3, use [DefinitionV3](https://github.com/grongierisc/objectscript-openapi-definition/blob/master/src/Grongier/OpenApi/DefinitionV3.cls) class : 
+```
+Set specification = <Dynamic Object with the OpenAPI specification v3>
+Set generator = ##class(Grongier.OpenApi.DefinitionV3).%New(specification, "targetpackage")
+Set sc = generator.GenerateClasses()
+```
 
 ## What's inside the repository
 
