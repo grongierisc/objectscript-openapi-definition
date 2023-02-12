@@ -182,6 +182,11 @@ AdditionalPropertySettings
         Do propDef.Parameters.SetAt(valueList,"VALUELIST")        
     }
 
+    If ..super [ "%XML.Adaptor" {
+        If $IsObject(pObj.xml), pObj.xml.name '= "" Do propDef.Parameters.SetAt(pObj.xml.name, "XMLNAME")
+        If $IsObject(pObj.items), $IsObject(pObj.items.xml), pObj.items.xml.name '= "" Do propDef.Parameters.SetAt(pObj.items.xml.name, "XMLITEMNAME")
+    }
+
     Quit
 }
 
