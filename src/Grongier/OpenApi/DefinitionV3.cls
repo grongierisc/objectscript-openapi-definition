@@ -114,6 +114,8 @@ Method GenerateProperties(classDef As %Dictionary.ClassDefinition, properties As
             Do ..GenerateClassModel(property, propDef.Type)
         
         } ElseIf property.type = "array" {
+            
+            Do XMLParameters
 
             Set propDef.Collection = "list"
             
@@ -128,6 +130,8 @@ Method GenerateProperties(classDef As %Dictionary.ClassDefinition, properties As
                 ; We have to check if the reference is type object or a primitive.
                 Set refObject = ..GetObjectByRef(property.items."$ref", .name)
                 Continue:'$IsObject(refObject)
+                
+                
                 
                 Set propDef.Type = $Select(refObject.type="object": ..package _ "." _name, 1: ..GetObjectScriptType(refObject.type, refObject.format))
                 Set pObj = refObject
@@ -180,6 +184,16 @@ AdditionalPropertySettings
         }
 
         Do propDef.Parameters.SetAt(valueList,"VALUELIST")        
+    }
+    
+    Do XMLParameters
+
+    Quit
+
+XMLParameters
+    If ..super [ "%XML.Adaptor" {
+        If $IsObject(pObj.xml), pObj.xml.name '= "" Do propDef.Parameters.SetAt(pObj.xml.name, $Select(propDef.Collection = "list":"XMLITEMNAME",1:"XMLNAME"))
+        If $IsObject(pObj.items), $IsObject(pObj.items.xml), pObj.items.xml.name '= "" Do propDef.Parameters.SetAt(pObj.items.xml.name, "XMLITEMNAME")
     }
 
     Quit
