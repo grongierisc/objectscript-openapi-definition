@@ -20,7 +20,12 @@ Property allowPropertyOverride As %Boolean [ InitialExpression = {$$$YES} ];
 
 Property generateInLineModel As %Boolean [ InitialExpression = {$$$NO} ];
 
-Method %OnNew(specification As %DynamicObject, package As %String, super As %String, compile As %Boolean, flags As %String) As %Status
+Method %OnNew(
+	specification As %DynamicObject,
+	package As %String,
+	super As %String,
+	compile As %Boolean,
+	flags As %String) As %Status
 {
     Set ..spec = specification, ..package = package
 
@@ -64,7 +69,9 @@ Method GenerateClasses() As %Status
     Quit sc
 }
 
-Method GenerateClassModel(schema As %DynamicObject, className As %String) As %Status
+Method GenerateClassModel(
+	schema As %DynamicObject,
+	className As %String) As %Status
 {
     Set sc = $$$OK, requiredArray = []
 
@@ -86,7 +93,9 @@ Method GenerateClassModel(schema As %DynamicObject, className As %String) As %St
     Quit sc
 }
 
-Method GenerateProperties(classDef As %Dictionary.ClassDefinition, properties As %DynamicObject) As %Status
+Method GenerateProperties(
+	classDef As %Dictionary.ClassDefinition,
+	properties As %DynamicObject) As %Status
 {
     Set sc = $$$OK
 
@@ -103,7 +112,7 @@ Method GenerateProperties(classDef As %Dictionary.ClassDefinition, properties As
             Continue
         }
 
-        Set:'$IsObject(propDef) propDef = ##class(%Dictionary.PropertyDefinition).%New(classDef.Name _ ":" _ key)
+        Set:'$IsObject(propDef) propDef = ##class(%Dictionary.PropertyDefinition).%New(classDef.Name _ ":" _ $zstrip(key,"*P"))
 
         If property.type = "object" {
 
@@ -172,7 +181,8 @@ AdditionalPropertySettings
     Do:pObj.maxLength'="" propDef.Parameters.SetAt(pObj.maxLength,"MAXLEN")        
     Do:pObj.minLength'="" propDef.Parameters.SetAt(pObj.minLength,"MINLEN")        
     Do:pObj.minimum'="" propDef.Parameters.SetAt(pObj.minimum,"MINVAL")        
-    Do:pObj.maximum'="" propDef.Parameters.SetAt(pObj.maximum,"MAXVAL")        
+    Do:pObj.maximum'="" propDef.Parameters.SetAt(pObj.maximum,"MAXVAL")
+    If ..super [ "%JSON.Adaptor",$zstrip(key,"*P") '= key Do propDef.Parameters.SetAt(key,"%JSONFIELDNAME")
     Set:pObj.default'="" propDef.InitialExpression = """" _ pObj.default _""""
     
     If pObj.%IsDefined("enum"), $IsObject(pObj.enum), pObj.enum.%IsA("%DynamicArray") {
@@ -199,7 +209,9 @@ XMLParameters
     Quit
 }
 
-Method ManageAllOf(classDef As %Dictionary.ClassDefinition, schema As %DynamicObject) As %Status
+Method ManageAllOf(
+	classDef As %Dictionary.ClassDefinition,
+	schema As %DynamicObject) As %Status
 {
     Set sc = $$$OK, superClasses = ""
     
@@ -228,7 +240,9 @@ Method ManageAllOf(classDef As %Dictionary.ClassDefinition, schema As %DynamicOb
     Quit sc
 }
 
-Method ManageRequiredProperties(classDef As %Dictionary.ClassDefinition, requiredArray As %DynamicArray) As %Status
+Method ManageRequiredProperties(
+	classDef As %Dictionary.ClassDefinition,
+	requiredArray As %DynamicArray) As %Status
 {
     Set sc = $$$OK
 
@@ -344,7 +358,10 @@ parametersObject
     Quit
 }
 
-ClassMethod log(msg As %String, nl As %Boolean = {$$$YES}, dtOnNL As %Boolean = {$$$YES})
+ClassMethod log(
+	msg As %String,
+	nl As %Boolean = {$$$YES},
+	dtOnNL As %Boolean = {$$$YES})
 {
     Quit:$Get(%zverbose)=0
 
@@ -355,7 +372,9 @@ ClassMethod log(msg As %String, nl As %Boolean = {$$$YES}, dtOnNL As %Boolean = 
     Quit
 }
 
-ClassMethod GetObjectScriptType(oaType As %DynamicObject, format As %String = "") As %String
+ClassMethod GetObjectScriptType(
+	oaType As %DynamicObject,
+	format As %String = "") As %String
 {
 
     Quit:oaType="" "%VarString"
@@ -383,7 +402,9 @@ ClassMethod GetObjectScriptType(oaType As %DynamicObject, format As %String = ""
     Quit $Get(table(oaType, format), $Get(table(oaType), "%VarString" ))
 }
 
-Method GetObjectByRef(reference As %String, Output name As %String) As %DynamicObject
+Method GetObjectByRef(
+	reference As %String,
+	Output name As %String) As %DynamicObject
 {
     /// ex reference : "#/components/schemas/model"
 
@@ -401,7 +422,9 @@ Method GetObjectByRef(reference As %String, Output name As %String) As %DynamicO
     Quit tmpObjRef
 }
 
-ClassMethod CreateClassDefInstance(className As %String, Output classDef As %Dictionary.ClassDefinition = "") As %Dictionary.ClassDefinition
+ClassMethod CreateClassDefInstance(
+	className As %String,
+	Output classDef As %Dictionary.ClassDefinition = "") As %Dictionary.ClassDefinition
 {
     If $$$defClassDefined(className) {
         Set sc = $$Delete^%apiOBJ(className,"-d")
@@ -420,7 +443,11 @@ ClassMethod CreateClassDefInstance(className As %String, Output classDef As %Dic
     Quit $$$OK
 }
 
-Method CommonSchemaProcess(classDef As %Dictionary.ClassDefinition, propDef As %Dictionary.PropertyDefinition, schema As %DynamicObject, name As %String) As %Status
+Method CommonSchemaProcess(
+	classDef As %Dictionary.ClassDefinition,
+	propDef As %Dictionary.PropertyDefinition,
+	schema As %DynamicObject,
+	name As %String) As %Status
 {
     Set sc = $$$OK
 
@@ -473,7 +500,9 @@ Method CommonSchemaProcess(classDef As %Dictionary.ClassDefinition, propDef As %
     Quit sc
 }
 
-ClassMethod FindPropertyName(classDefinition As %Dictionary.ClassDefinition, propertyName As %String) As %Dictionary.PropertyDefinition
+ClassMethod FindPropertyName(
+	classDefinition As %Dictionary.ClassDefinition,
+	propertyName As %String) As %Dictionary.PropertyDefinition
 {
     #dim property As %Dictionary.PropertyDefinition
     Set key = ""
@@ -489,7 +518,11 @@ ClassMethod FindPropertyName(classDefinition As %Dictionary.ClassDefinition, pro
     Return ""
 }
 
-ClassMethod GetClsNameForAnonymObject(path As %String = "", method As %String = "", name As %String = "", contentType As %String = "") As %String
+ClassMethod GetClsNameForAnonymObject(
+	path As %String = "",
+	method As %String = "",
+	name As %String = "",
+	contentType As %String = "") As %String
 {
     Quit "Z"_name _ $ZCRC(path_method_name_contentType,0)
 }
